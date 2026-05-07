@@ -1,0 +1,18 @@
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+
+# Datasets
+dataset/
+tomato_dataset/
+
+# Trained models
+*.h5
+*.keras
+models/
+
+# OS files
+.DS_Store
+Thumbs.db
