@@ -1,5 +1,3 @@
-# evaluate_model.py
-
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
@@ -11,38 +9,38 @@ from datetime import datetime
 # ======================
 # SETUP
 # ======================
-os.makedirs("results", exist_ok=True)
+os.makedirs("results", exist_ok=True)   # Create results folder if it doesn't exist
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 # ======================
 # LOAD DATA
 # ======================
-_, _, test_generator = get_data_generators(model_type="mobilenet")
+_, _, test_generator = get_data_generators(model_type="mobilenet")  # Load only the test generator
 
 # ======================
 # LOAD MODEL
 # ======================
-model = load_model("models/best_mobilenet.keras")
+model = load_model("models/best_mobilenet.keras")   # Load the best saved MobileNet model
 
 # ======================
 # PREDICTIONS
 # ======================
 print("\n🔍 Running predictions on test data...")
-preds = model.predict(test_generator)
+preds = model.predict(test_generator)   # Predict probabilities for all test images
 
-y_pred = np.argmax(preds, axis=1)
-y_true = test_generator.classes
+y_pred = np.argmax(preds, axis=1)   # Convert probabilities → class index
+y_true = test_generator.classes # Actual labels from dataset
 
 # ======================
 # LABELS
 # ======================
-labels = list(test_generator.class_indices.keys())
-labels = sorted(labels, key=lambda x: test_generator.class_indices[x])
+labels = list(test_generator.class_indices.keys())  # Get class labels
+labels = sorted(labels, key=lambda x: test_generator.class_indices[x])  # Sort labels according to class indices
 
 # ======================
-# CONFUSION MATRIX (RAW)
+# CONFUSION MATRIX (RAW COUNTS)
 # ======================
-cm = confusion_matrix(y_true, y_pred)
+cm = confusion_matrix(y_true, y_pred)   # Create confusion matrix
 
 plt.figure(figsize=(6,6))
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
@@ -56,6 +54,7 @@ plt.close()
 # ======================
 # CONFUSION MATRIX (NORMALIZED)
 # ======================
+# Normalize confusion matrix values
 cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 
 plt.figure(figsize=(6,6))
@@ -74,6 +73,7 @@ print(f"   - {cm_norm_path}")
 # ======================
 # CLASSIFICATION REPORT
 # ======================
+# Generate detailed evaluation report
 report = classification_report(
     y_true,
     y_pred,
