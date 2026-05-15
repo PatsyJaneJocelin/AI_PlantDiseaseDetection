@@ -3,6 +3,7 @@
 
 # Python cache
 __pycache__/
+*.pyc
 
 # Datasets
 dataset/
@@ -12,6 +13,18 @@ tomato_dataset/
 *.h5
 *.keras
 models/
+
+# Ignore all files inside results
+results/*
+
+# BUT keep selected images
+!results/confusion_matrix_counts_20260515_182158.png
+!results/confusion_matrix_normalized_20260515_182158.png
+!results/mobilenet_accuracy_20260429_005409.png
+!results/original_vs_augmented.png
+!results/mobilenet_results_20260429_005409.txt
+!results/mobilenet_loss_20260429_005409.png
+!results/mobilenet_accuracy_20260429_005409.png
 
 # OS files
 .DS_Store

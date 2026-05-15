@@ -42,10 +42,13 @@ labels = sorted(labels, key=lambda x: test_generator.class_indices[x])  # Sort l
 # ======================
 cm = confusion_matrix(y_true, y_pred)   # Create confusion matrix
 
-plt.figure(figsize=(6,6))
+fig, ax = plt.subplots(figsize=(10,8))
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
-disp.plot(cmap=plt.cm.Blues, values_format='d')
+disp.plot(cmap=plt.cm.Blues, values_format='d', ax=ax)
+plt.xticks(rotation=15, ha='right')
 plt.title("Confusion Matrix (Counts)")
+plt.tight_layout()
+
 
 cm_path = f"results/confusion_matrix_counts_{timestamp}.png"
 plt.savefig(cm_path)
@@ -57,10 +60,12 @@ plt.close()
 # Normalize confusion matrix values
 cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 
-plt.figure(figsize=(6,6))
+fig, ax = plt.subplots(figsize=(10,8))
 disp_norm = ConfusionMatrixDisplay(confusion_matrix=cm_normalized, display_labels=labels)
-disp_norm.plot(cmap=plt.cm.Blues, values_format='.2f')
+disp_norm.plot(cmap=plt.cm.Blues, values_format='.2f', ax=ax)
+plt.xticks(rotation=15, ha='right')
 plt.title("Confusion Matrix (Normalized)")
+plt.tight_layout()
 
 cm_norm_path = f"results/confusion_matrix_normalized_{timestamp}.png"
 plt.savefig(cm_norm_path)

@@ -10,7 +10,7 @@ import shutil
 os.makedirs("results", exist_ok=True)       # Create results folder if it doesn't exist
 
 IMG_SIZE = (224, 224)       # Image size used during training
-CONFIDENCE_THRESHOLD = 0.6      # Minimum confidence required for prediction
+CONFIDENCE_THRESHOLD = 0.75      # Minimum confidence required for prediction
 
 # ======================
 # LOAD MODEL
@@ -54,7 +54,9 @@ def predict(img_path):
 
     img = image.load_img(img_path, target_size=IMG_SIZE)    # Resize image to model input size
     img_array = image.img_to_array(img)    # Convert image into array
-    img_array = np.expand_dims(img_array, axis=0)    # Add extra dimension for model input
+    img_array = np.expand_dims(img_array, axis=0)    # Add extra dimension for model 
+        # Model Expects --> (batch_size, height, width, channels)  --> batch_size = 1 image batch
+        # So instead of --> (224,224,3)     # it becomes --> (1, 224,224,3)
 
     # Applying MobileNet preprocessing
     from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
@@ -66,9 +68,9 @@ def predict(img_path):
     # Get prediction probabilities
     preds = model.predict(img_array)[0]
 
-    class_idx = np.argmax(preds)    # Get class with highest probability
-    confidence = preds[class_idx]    # Confidence score
-    prediction = clean_label(class_names[class_idx])    # Convert class label into readable text
+    class_idx = np.argmax(preds)    # Get class with highest probability --> if [0.05, 0.90, 0.05], then 1
+    confidence = preds[class_idx]    # Confidence score, that is 90% (in above case)
+    prediction = clean_label(class_names[class_idx])    # Convert class index to class label
 
     print("\n======================")
     print("🌿 Final Prediction")
